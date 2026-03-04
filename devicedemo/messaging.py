@@ -13,6 +13,8 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+## 使用 oslo_messaging 框架实现 RPC 通信：
+
 from oslo_config import cfg
 import oslo_messaging
 
@@ -47,6 +49,9 @@ def get_transport(url=None, optional=False, cache=True):
 
 
 def get_target():
+    """
+    获取 RPC 目标
+    """
     global RPC_TARGET
     if RPC_TARGET is None:
         RPC_TARGET = oslo_messaging.Target(topic='devicedemo', version='1.0')
@@ -54,12 +59,18 @@ def get_target():
 
 
 def get_client(version_cap=None):
+    """
+    获取 RPC 客户端
+    """
     transport = get_transport()
     target = get_target()
     return oslo_messaging.RPCClient(transport, target, version_cap=version_cap)
 
 
 def get_server(target=None, endpoints=None):
+    """
+    获取 RPC 服务器
+    """
     transport = get_transport()
     if not target:
         target = get_target()
@@ -68,7 +79,10 @@ def get_server(target=None, endpoints=None):
 
 
 def cleanup():
-    """Cleanup the oslo_messaging layer."""
+    """
+    Cleanup the oslo_messaging layer.
+    清理 oslo_messaging 层的资源
+    """
     global TRANSPORTS, NOTIFIERS
     NOTIFIERS = {}
     for url in TRANSPORTS:

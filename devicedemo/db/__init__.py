@@ -15,6 +15,8 @@
 #
 # @author: Stéphane Albert
 #
+## 数据库会话获取
+
 from oslo_config import cfg
 from oslo_db.sqlalchemy import session
 
@@ -22,6 +24,9 @@ _FACADE = None
 
 
 def _create_facade_lazily():
+    """
+    创建数据库会话工厂
+    """
     global _FACADE
     if _FACADE is None:
         _FACADE = session.EngineFacade.from_config(cfg.CONF, sqlite_fk=True)
@@ -29,10 +34,16 @@ def _create_facade_lazily():
 
 
 def get_engine():
+    """
+    获取数据库引擎
+    """
     facade = _create_facade_lazily()
     return facade.get_engine()
 
 
 def get_session(**kwargs):
+    """
+    获取数据库会话
+    """
     facade = _create_facade_lazily()
     return facade.get_session(**kwargs)

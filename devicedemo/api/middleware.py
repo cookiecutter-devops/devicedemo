@@ -30,6 +30,7 @@ class AuthTokenMiddleware(auth_token.AuthProtocol):
 
     def __call__(self, env, start_response):
         # Strip the / from the URL if we're not dealing with '/'
+        # 检查是否为公共路由，如果是则跳过认证
         path = env.get('PATH_INFO').rstrip('/') or '/'
 
         if path in self._public_routes:

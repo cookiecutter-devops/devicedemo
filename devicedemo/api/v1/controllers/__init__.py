@@ -19,10 +19,10 @@ from pecan import rest
 
 from devicedemo.api.v1.controllers import device as device_api
 
-
+# V1 控制器
 class V1Controller(rest.RestController):
     """API version 1 controller.
 
     """
 
-    device = device_api.DeviceController()
+    device = device_api.DeviceController()      # 设备资源控制器

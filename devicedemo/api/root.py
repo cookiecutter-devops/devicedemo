@@ -114,7 +114,7 @@ class RootController(rest.RestController):
 
     """
 
-    v1 = v1_api.V1Controller()
+    v1 = v1_api.V1Controller()  # V1 API 子控制器
 
     @wsme_pecan.wsexpose([APIVersion])
     def index(self):
@@ -123,6 +123,7 @@ class RootController(rest.RestController):
         """
         # TODO(sheeprine): Maybe we should store all the API version
         # informations in every API modules
+        # 返回可用的 API 版本列表
         ver1 = APIVersion(
             id='v1',
             status='EXPERIMENTAL',

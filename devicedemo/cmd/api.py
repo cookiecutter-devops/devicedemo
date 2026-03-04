@@ -13,18 +13,17 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-from devicedemo.api import app 
+from devicedemo.api import app
 from devicedemo import service
 
 
 def main():
-    service.prepare_service()
-    server = app.build_server()
+    service.prepare_service()  # 准备服务环境
+    server = app.build_server()  # 构建HTTP服务器
     try:
-        server.serve_forever()
+        server.serve_forever()  # 启动服务循环
     except KeyboardInterrupt:
         pass
-
 
 if __name__ == '__main__':
     main()
