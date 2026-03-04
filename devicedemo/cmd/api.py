@@ -1,4 +1,4 @@
-# ~*~ coding: utf-8 ~*~
+# -*- coding: utf-8 -*-
 # Copyright 2013 - Red Hat, Inc.
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,17 +13,28 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
+import sys
+import traceback
+
 from devicedemo.api import app
 from devicedemo import service
 
 
 def main():
-    service.prepare_service()  # 准备服务环境
-    server = app.build_server()  # 构建HTTP服务器
+    """devicedemo-api入口函数"""
     try:
-        server.serve_forever()  # 启动服务循环
+        service.prepare_service()  # 准备服务环境
+        manager = app.run_server()  # 使用Cotyledon运行服务器
+        return manager
     except KeyboardInterrupt:
-        pass
+        # 捕获键盘中断，确保优雅退出
+        print("\nReceived interrupt signal, shutting down gracefully...", file=sys.stderr)
+        return 1
+    except Exception as e:
+        # 记录完整异常信息
+        print(f"Error starting devicedemo-api: {e}", file=sys.stderr)
+        traceback.print_exc(file=sys.stderr)
+        return 2
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main() or 0)

@@ -144,3 +144,8 @@ class RootController(rest.RestController):
         versions.append(ver1)
 
         return versions
+
+    @wsme_pecan.wsexpose(wtypes.text)
+    def health(self):
+        """Health check endpoint"""
+        return "OK"
