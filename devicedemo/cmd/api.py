@@ -13,28 +13,28 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-import sys
-import traceback
-
-from devicedemo.api import app
-from devicedemo import service
+# API服务启动命令 - devicedemo服务的主入口点
+from devicedemo.api import app      # 导入API应用模块
+from devicedemo import service     # 导入服务管理模块
 
 
 def main():
-    """devicedemo-api入口函数"""
-    try:
-        service.prepare_service()  # 准备服务环境
-        manager = app.run_server()  # 使用Cotyledon运行服务器
-        return manager
-    except KeyboardInterrupt:
-        # 捕获键盘中断，确保优雅退出
-        print("\nReceived interrupt signal, shutting down gracefully...", file=sys.stderr)
-        return 1
-    except Exception as e:
-        # 记录完整异常信息
-        print(f"Error starting devicedemo-api: {e}", file=sys.stderr)
-        traceback.print_exc(file=sys.stderr)
-        return 2
+    """
+    主函数 - devicedemo API服务的入口点
 
-if __name__ == '__main__':
-    sys.exit(main() or 0)
+    该函数执行以下步骤：
+    1. 准备服务环境（配置、日志等）
+    2. 构建WSGI服务器实例
+    3. 启动服务器并持续监听请求
+    4. 处理中断信号
+    """
+    service.prepare_service()  # 准备服务环境，包括配置加载、日志设置等
+    server = app.build_server()  # 构建WSGI服务器实例
+    try:
+        server.serve_forever()  # 启动服务器并持续处理请求
+    except KeyboardInterrupt:  # 捕获Ctrl+C中断信号
+        pass  # 退出程序
+
+
+if __name__ == '__main__':  # 当作为主脚本运行时
+    main()  # 调用主函数
